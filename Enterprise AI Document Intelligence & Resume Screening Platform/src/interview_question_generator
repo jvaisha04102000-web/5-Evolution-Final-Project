@@ -1,0 +1,131 @@
+from typing import Dict, List
+
+from langchain_core.prompts import ChatPromptTemplate
+
+from workflows.langchain_pipeline import LangChainPipeline
+
+
+class InterviewQuestionGenerator:
+    """
+    Enterprise Interview Question Generator
+
+    Features
+    --------
+    ✔ Technical Questions
+    ✔ HR Questions
+    ✔ Project-based Questions
+    ✔ Experience-based Questions
+    ✔ AI Generated
+    """
+
+    def __init__(self):
+
+        self.pipeline = LangChainPipeline()
+
+    def generate_questions(
+        self,
+        resume_data: Dict,
+        total_questions: int = 10
+    ) -> List[str]:
+
+        prompt = ChatPromptTemplate.from_template(
+            """
+You are a Senior Technical Interviewer.
+
+Generate {count} interview questions using the candidate profile.
+
+Candidate Information
+
+Name:
+{name}
+
+Skills:
+{skills}
+
+Education:
+{education}
+
+Experience:
+{experience} years
+
+Rules:
+
+1. Mix technical and HR questions.
+2. Ask project-based questions.
+3. Ask scenario-based questions.
+4. Ask problem-solving questions.
+5. Return only numbered questions.
+"""
+        )
+
+        chain = prompt | self.pipeline.llm
+
+        response = chain.invoke({
+
+            "count": total_questions,
+
+            "name": resume_data["candidate_name"],
+
+            "skills": ", ".join(resume_data["skills"]),
+
+            "education": ", ".join(resume_data["education"]),
+
+            "experience": resume_data["experience_years"]
+
+        })
+
+        questions = []
+
+        for line in response.content.split("\n"):
+
+            line = line.strip()
+
+            if not line:
+                continue
+
+            questions.append(line)
+
+        return questions
+
+
+if __name__ == "__main__":
+
+    from document_loader import DocumentLoader
+    from text_extractor import TextExtractor
+    from resume_parser import ResumeParser
+
+    loader = DocumentLoader(
+        "data/raw_docs/resumes"
+    )
+
+    extractor = TextExtractor()
+
+    parser = ResumeParser()
+
+    resumes = extractor.clean_documents(
+        loader.load_documents()
+    )
+
+    candidate = parser.parse_resume(
+        resumes[0]
+    )
+
+    generator = InterviewQuestionGenerator()
+
+    questions = generator.generate_questions(
+        candidate,
+        total_questions=10
+    )
+
+    print("=" * 80)
+
+    print(
+        f"Interview Questions for "
+        f"{candidate['candidate_name']}"
+    )
+
+    print("=" * 80)
+
+    for question in questions:
+
+        print(question)
