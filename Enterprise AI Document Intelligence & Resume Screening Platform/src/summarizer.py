@@ -1,4 +1,5 @@
 from langchain_core.prompts import ChatPromptTemplate
+
 from workflows.langchain_pipeline import LangChainPipeline
 
 
@@ -15,49 +16,45 @@ class DocumentSummarizer:
     """
 
     def __init__(self):
-
         self.pipeline = LangChainPipeline()
 
     def summarize(
-            self,
-            document_text: str,
-            summary_type: str = "executive"
+        self,
+        document_text: str,
+        summary_type: str = "executive"
     ):
 
         prompts = {
 
-            "executive":
-                """
-                You are an enterprise AI assistant.
+            "executive": """
+You are an enterprise AI assistant.
 
-                Generate an executive summary of the document.
+Generate an executive summary of the document.
 
-                Keep it concise.
+Keep it concise.
 
-                Document:
+Document:
 
-                {document}
-                """,
+{document}
+""",
 
-            "detailed":
-                """
-                Summarize the document.
+            "detailed": """
+Summarize the document.
 
-                Include all important information.
+Include all important information.
 
-                Document:
+Document:
 
-                {document}
-                """,
+{document}
+""",
 
-            "bullet":
-                """
-                Summarize the document into bullet points.
+            "bullet": """
+Summarize the document into bullet points.
 
-                Document:
+Document:
 
-                {document}
-                """
+{document}
+"""
 
         }
 
@@ -67,40 +64,35 @@ class DocumentSummarizer:
 
         chain = prompt | self.pipeline.llm
 
-        response = chain.invoke({
-
-            "document": document_text
-
-        })
+        response = chain.invoke(
+            {
+                "document": document_text
+            }
+        )
 
         return response.content
 
 
 if __name__ == "__main__":
 
-    from document_loader import DocumentLoader
-    from text_extractor import TextExtractor
+    from src.document_loader import DocumentLoader
+    from src.text_extractor import TextExtractor
 
     loader = DocumentLoader("data/raw_docs")
 
-    docs = loader.load_documents()
+    documents = loader.load_documents()
 
     extractor = TextExtractor()
 
-    docs = extractor.clean_documents(docs)
+    documents = extractor.clean_documents(documents)
 
     summarizer = DocumentSummarizer()
 
     summary = summarizer.summarize(
-
-        docs[0].text,
-
+        documents[0].text,
         summary_type="executive"
-
     )
 
     print("=" * 70)
-
     print(summary)
-
     print("=" * 70)

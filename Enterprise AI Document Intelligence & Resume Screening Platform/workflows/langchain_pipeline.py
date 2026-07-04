@@ -1,6 +1,6 @@
 import os
 
-from langchain_openai import ChatOpenAI
+from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 from langchain.chains import RetrievalQA

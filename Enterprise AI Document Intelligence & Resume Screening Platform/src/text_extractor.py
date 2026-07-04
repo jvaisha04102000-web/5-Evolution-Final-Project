@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from src.document_loader import DocumentData
@@ -9,9 +10,9 @@ class TextExtractor:
     Enterprise Text Preprocessing Engine
 
     Features:
+    - Remove extra spaces
     - Normalize text
-    - Remove unwanted characters
-    - Standardize whitespace
+    - Clean unicode characters
     - Generate metadata
     """
 
@@ -62,22 +63,15 @@ if __name__ == "__main__":
 
     extractor = TextExtractor()
 
-    cleaned_documents = extractor.clean_documents(
-        documents
-    )
+    cleaned_documents = extractor.clean_documents(documents)
 
     print("=" * 60)
-
     print(f"Documents Processed : {len(cleaned_documents)}")
-
     print("=" * 60)
 
     for document in cleaned_documents:
 
-        print(document.file_name)
-
-        print(document.metadata)
-
-        print(TextUtils.preview(document.text))
-
+        print("File:", document.file_name)
+        print("Meta:", document.metadata)
+        print("Preview:", TextUtils.preview(document.text))
         print("-" * 80)
