@@ -3,12 +3,14 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+
 class Config:
+
     # Flask
     SECRET_KEY = os.getenv("SECRET_KEY", "dev_secret_key")
-    
-    # OpenAI
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+
+    # Groq
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 
     # Paths
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -21,11 +23,10 @@ class Config:
     FAISS_INDEX_PATH = os.path.join(EMBEDDINGS_DIR, "faiss_index")
 
     # Logging
-    # Logging
     LOG_FILE = os.path.join(BASE_DIR, "logs", "app.log")
     AI_LOG_FILE = os.path.join(BASE_DIR, "logs", "ai_interactions.log")
     ACTIVITY_LOG_FILE = os.path.join(BASE_DIR, "logs", "activity_logs.json")
 
-    # Model settings
-    EMBEDDING_MODEL = "text-embedding-3-small"
-    CHAT_MODEL = "gpt-4o-mini"
+    # Models
+    EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+    CHAT_MODEL = "llama-3.3-70b-versatile"

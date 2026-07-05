@@ -16,9 +16,9 @@ class LangChainPipeline:
             model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
 
-        self.llm = ChatOpenAI(
-            api_key=Config.OPENAI_API_KEY,
-            model=Config.CHAT_MODEL,
+        self.llm = ChatGroq(
+            api_key=Config.GROQ_API_KEY,
+            model_name=Config.CHAT_MODEL,
             temperature=0
         )
 

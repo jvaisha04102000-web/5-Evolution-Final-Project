@@ -90,9 +90,9 @@ Rules:
 
 if __name__ == "__main__":
 
-    from document_loader import DocumentLoader
-    from text_extractor import TextExtractor
-    from resume_parser import ResumeParser
+    from src.document_loader import DocumentLoader
+    from src.text_extractor import TextExtractor
+    from src.resume_parser import ResumeParser
 
     loader = DocumentLoader(
         "data/raw_docs/resumes"

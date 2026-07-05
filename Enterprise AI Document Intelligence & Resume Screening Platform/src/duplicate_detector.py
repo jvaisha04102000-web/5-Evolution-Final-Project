@@ -3,7 +3,7 @@ from typing import List, Dict
 import numpy as np
 from utils.similarity_utils import SimilarityUtils
 
-from document_loader import DocumentData
+from src.document_loader import DocumentData
 from workflows.langchain_pipeline import LangChainPipeline
 
 
@@ -100,8 +100,8 @@ class DuplicateDocumentDetector:
 
 if __name__ == "__main__":
 
-    from document_loader import DocumentLoader
-    from text_extractor import TextExtractor
+    from src.document_loader import DocumentLoader
+    from src.text_extractor import TextExtractor
 
     loader = DocumentLoader(
         "data/raw_docs"

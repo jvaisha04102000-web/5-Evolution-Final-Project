@@ -1,6 +1,7 @@
-from typing import List, Dict
+from typing import Dict
 
 from workflows.langchain_pipeline import LangChainPipeline
+from src.logger import logger
 
 
 class HRChatbot:
@@ -23,6 +24,8 @@ class HRChatbot:
         self.pipeline.initialize_qa()
 
         self.chat_history = []
+
+        logger.info("HR Chatbot initialized")
 
     def ask(
         self,
@@ -52,6 +55,24 @@ class HRChatbot:
 
         self.chat_history.append(interaction)
 
+        # Log AI interaction
+        logger.log_ai_interaction(
+            module="HR Chatbot",
+            question=question,
+            answer=response["answer"]
+        )
+
+        # Log activity
+        logger.log_activity(
+            module="HR Chatbot",
+            action="Question Answered",
+            status="Success",
+            details={
+                "question": question,
+                "sources": interaction["sources"]
+            }
+        )
+
         return interaction
 
     def get_chat_history(self):
@@ -61,6 +82,12 @@ class HRChatbot:
     def clear_chat_history(self):
 
         self.chat_history.clear()
+
+        logger.log_activity(
+            module="HR Chatbot",
+            action="Clear Chat History",
+            status="Success"
+        )
 
 
 if __name__ == "__main__":
@@ -77,6 +104,9 @@ if __name__ == "__main__":
         question = input("\nYou : ")
 
         if question.lower() == "exit":
+
+            logger.info("HR Chatbot closed")
+
             break
 
         response = chatbot.ask(question)

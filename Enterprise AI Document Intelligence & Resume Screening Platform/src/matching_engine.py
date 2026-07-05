@@ -1,8 +1,8 @@
 from typing import Dict, List
 
-from resume_parser import ResumeParser
-from document_loader import DocumentData
-
+from src.resume_parser import ResumeParser
+from src.job_parser import JobDescriptionParser
+from src.document_loader import DocumentData
 
 class ResumeMatchingEngine:
     """
@@ -20,9 +20,6 @@ class ResumeMatchingEngine:
     def __init__(self):
 
         self.resume_parser = ResumeParser()
-
-        from job_parser import JobDescriptionParser
-
         self.job_parser = JobDescriptionParser()
 
     def rank_candidates(
@@ -130,8 +127,8 @@ class ResumeMatchingEngine:
 
 if __name__ == "__main__":
 
-    from document_loader import DocumentLoader
-    from text_extractor import TextExtractor
+    from src.document_loader import DocumentLoader
+    from src.text_extractor import TextExtractor
 
     resume_loader = DocumentLoader(
         "data/raw_docs/resumes"

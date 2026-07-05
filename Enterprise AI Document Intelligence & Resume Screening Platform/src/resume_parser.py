@@ -1,7 +1,7 @@
 import re
 from typing import Dict, List
 
-from document_loader import DocumentData
+from src.document_loader import DocumentData
 
 
 class ResumeParser:
@@ -65,7 +65,21 @@ class ResumeParser:
             if line.strip()
         ]
 
-        return lines[0] if lines else "Unknown"
+        if not lines:
+            return "Unknown"
+
+        first_line = lines[0]
+
+        # Email iruntha athukku munnadi irukkara text mattum edukkum
+        first_line = first_line.split("@")[0]
+
+        # Phone number remove pannum
+        first_line = re.sub(r"\+?\d[\d\s-]{8,}", "", first_line)
+
+        # Maximum first 2 words name-nu assume pannuvom
+        words = first_line.split()
+
+        return " ".join(words[:2])
 
     def extract_email(self, text: str):
 
@@ -116,8 +130,8 @@ class ResumeParser:
 
 if __name__ == "__main__":
 
-    from document_loader import DocumentLoader
-    from text_extractor import TextExtractor
+    from src.document_loader import DocumentLoader
+    from src.text_extractor import TextExtractor
 
     loader = DocumentLoader("data/raw_docs/resumes")
 

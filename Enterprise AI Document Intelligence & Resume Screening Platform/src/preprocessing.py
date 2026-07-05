@@ -111,3 +111,12 @@ if __name__ == "__main__":
         print(chunk.metadata)
         print(chunk.text[:250])
         print("-" * 70)
+
+    from workflows.langchain_pipeline import LangChainPipeline
+
+    print("\nCreating FAISS Vector Store...")
+
+    pipeline = LangChainPipeline()
+    pipeline.create_vector_store(chunks)
+
+    print("Vector Store Created Successfully!")
